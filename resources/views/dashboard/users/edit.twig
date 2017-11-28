@@ -1,0 +1,105 @@
+{% extends 'layouts/dashboard.twig' %}
+{% block pageclass %}{% endblock %}
+{% block title %}create{% endblock %}
+{% block name %}Create{% endblock %}
+
+{% block content %}
+
+<form action="{{ path_for('dashboard.users.store') }}" method="post" class="page-form" enctype="multipart/form-data" autocomplete="off">
+    <div class="title-bar">
+        <h6>Edit User: <span class="post-name"></span>{{ user.name }}</h6>
+        {% if auth.user.role == 'admin' %}
+            <a href="{{ path_for('dashboard.posts.create') }}" class="button">Add New</a>
+        {% else %}
+            <button type="submit">Update</button>
+        {% endif %}
+    </div>
+    <div class="container container-full is-aligned-top">
+        <div class="column-9">
+            <p><strong>Info</strong></p>
+            <div class="field">
+                <label for="name">Name</label>
+                <input type="text" name="name" value="{{ user.name }}">
+            </div>
+            <div class="field">
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" name="password">
+                    <i class="view-password">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <g class="nc-icon-wrapper" fill="#A9BFD6">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"></path>
+                        </g>
+                    </svg>
+                    </i>
+                </div>
+            </div>
+            <div class="field">
+                <label for="position">Position</label>
+                <input type="text" name="position" value="{{ user.position }}">
+            </div>
+            <p><strong>Contact</strong></p>
+            <div class="field">
+                <label for="email">Email</label>
+                <input type="email" name="email" value="{{ user.email }}">
+            </div>
+            <div class="field">
+                <label for="phone">Phone</label>
+                <input type="tel" name="phone" value="{{ user.phone }}">
+            </div>
+        </div>
+        <div class="column-3">
+        {% if auth.user.role == 'admin' %}
+            <div class="item-details">
+                <div class="item-details-title">
+                    <p><strong>Details</strong></p>
+                </div>
+                <div class="fields">
+                    <p><strong>Admin:</strong><label class="toggle"><input type="checkbox" name="admin" {% if user.role == 'admin' %}checked{% endif %}><span class="toggle-button"></span></label></p>
+                </div>
+                <footer>
+                    <a href="{{ path_for('dashboard.users.delete', { 'id': user.id } ) }}" class="delete">Delete</a>
+                    <button type="submit">Submit</button>
+                </footer>
+            </div>
+            {% endif %}
+            <div class="item-details">
+                <div class="item-details-title">
+                    <p><strong>Avatar</strong></p>
+                </div>
+                <div class="fields">
+                    <label class="featured-image image-upload"><input type="file" name="featured"> {% if avatar is null %}<span>Add Avatar</span>{% endif %}<img src="{% if avatar is not null %}{{ avatar }}{% endif %}" draggable="false" class="image-preview" {% if avatar is not null %}style="display: block"{% endif %}></label>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% if comments|length > 0 %}
+<div class="container container-full">
+    <div class="column-9">
+        <h6>Comments</h6>
+        <div class="search-bar has-gutter">
+            {% include 'partials/paginate.twig' with { 'context': 'comments' } %}
+            <form action="{{ path_for('dashboard.search', { 'category': 'comments' } ) }}" method="get">
+                <div class="field is-search">
+                    <input type="text" class="search" name="q" placeholder="Search...">
+                </div>
+            </form>
+        </div>
+        {% for comment in comments %}
+            <div class="media-object">
+                <img src="/assets/uploads/avatars/{{ comment.user.avatar }}.jpg" alt="{{ comment.user.name }}" class="media-object-image">
+                <div class="media-object-content">
+                    <p><small><a href="{{ path_for('dashboard.users.edit', { 'id': comment.user.id} ) }}"><strong>{{ comment.user.name }}</strong></a> says:</small></p>
+                    <p>{{ comment.body }}</p>
+                    <footer><small>{{ date(comment.created_at) }}</small></footer>
+                </div>
+            </div>
+        {% endfor %}
+        {% include 'partials/paginate.twig' with { 'context': 'comments' } %}
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

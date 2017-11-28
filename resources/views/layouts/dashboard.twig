@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Viewport Meta -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Styles -->
+
+    <link rel="stylesheet" href="/assets/css/app.css">
+
+    <!-- Mobile Theme Colour -->
+
+    <meta name="theme-color" content="#D73441">
+
+    <!-- Title and Description -->
+
+    <title></title>
+    <meta type="description" content="">
+
+    <!-- Favicons -->
+
+    <link rel="icon" href="assets/img/fav.png">
+
+    <meta property="og:title" content="">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:site_name" content="">
+    <meta property="og:image" content=" /assets/img/og.jpg">
+
+    <!--[if lt IE 9]>
+     <script src="js/polyfill/html5-shiv.js"></script>
+  <![endif]-->
+
+</head>
+<body>
+
+    <div class="off-canvas">
+        <div class="off-canvas-title">
+            <img src="/assets/uploads/avatars/{{ auth.user.avatar }}/avatar.jpg" draggable="false">
+            <h6>{{ auth.user.name }}</h6>
+        </div>
+        <ul>
+            <li><a href="{{ path_for('dashboard.posts') }}">View Posts</a></li>
+            <li><a href="{{ path_for('dashboard.users.profile', { 'id': auth.user.id }) }}">Edit Profile</a></li>
+            <li><a href="{{ path_for('auth.logout') }}" class="button">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="modal">
+        <div class="block">
+            {% block modalContent %}{% endblock %}
+        </div>
+    </div>
+    <div class="overlay"></div>
+        
+    {% include 'partials/flash.twig' %}
+
+    {% include 'partials/nav.twig' %}
+
+    <div class="content{% block pageclass %}{% endblock %} dashboard" id="app">
+        
+{#         <nav class="sidebar">
+            <h1></h1>
+            <ul class="sidebar-navbar">
+                <li><a href="{{ path_for('dashboard.index') }}" class="{% if current_path == path_for('dashboard.index') %}is-active{% endif %}">Dashboard</a></li>
+                <li><a href="{{ path_for('dashboard.posts') }}" class="{% if 'post' in current_path %}is-active{% endif %}">Posts</a></li>
+                {% if auth.user.role == 'admin' %}
+                    <li><a href="{{ path_for('dashboard.users') }}" class="{% if 'user' in current_path %}is-active{% endif %}">Users</a></li>
+                {% else %}
+                    <li><a href="{{ path_for('dashboard.users.profile', { id: auth.user.id } ) }}" class="{% if 'user' in current_path %}is-active{% endif %}">Profile</a></li>
+                {% endif %}
+                <li><a href="{{ path_for('dashboard.resources') }}" class="{% if 'resource' in current_path %}is-active{% endif %}">Resources</a></li>
+            </ul>
+            <div class="hamburger off-canvas-trigger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav> #}
+        
+        <div class="page">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <script src="/assets/js/app.js"></script>
+
+    <!-- See you space cowboy... -->
+</body>
+</html>

@@ -1,0 +1,23 @@
+<table>
+    <thead>
+        <tr>
+            <td>ID</td> 
+            <td></td>
+            <td>Name</td>
+            <td>Email</td>
+            <td>Last Active</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in results %}
+                <tr>
+                    <td data-th="ID">{{ result.id }}</td>
+                    <td data-th=""><img src="/assets/uploads/avatars/{{ result.avatar }}.jpg" draggable="false"></td>
+                    <td data-th="Name"><a href="{{ path_for('dashboard.users.edit', { 'id': result.id} ) }}">{{ result.name }}</a><small>Role: {{ result.role }}</small></td>
+                    <td data-th="Email"><span><a href="mailTo:{{ result.email }}">{{ result.email }}</a></span></td>
+                    <td data-th="Last Active">{{ result.active }}</td>
+                </tr>
+                <tr class="spacer"></tr>
+        {% endfor %}
+    </tbody>
+</table>

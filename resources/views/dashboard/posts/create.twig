@@ -1,0 +1,66 @@
+{% extends 'layouts/dashboard.twig' %}
+{% block pageclass %}{% endblock %}
+{% block title %}create{% endblock %}
+{% block name %}Create{% endblock %}
+
+{% block content %}
+
+<div class="title-bar">
+    <h6>Add Post: <span class="post-name"></span></h6>
+    <a href="{{ path_for('dashboard.posts.store') }}" class="button">Add New</a>
+</div>
+
+<form action="{{ path_for('dashboard.posts.store') }}" method="post" class="page-form" enctype="multipart/form-data">
+    <div class="container container-full is-aligned-top">
+        <div class="column-9">
+                <div class="field">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" value="{{ post.name }}" autocomplete="off">
+                </div>
+                <div class="field">
+                    <label for="body">Body</label>
+                    <textarea name="body" id="mde">{{ post.body }}</textarea>
+                </div>
+                <div class="field">
+                    <label>Add Files</label>
+                    <label for="files" class="files">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <g class="nc-icon-wrapper" fill="#acc1d6">
+                                    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"></path>
+                                </g>
+                            </svg>
+                            Choose Your Files
+                        </span>
+                        <input type="file" name="files[]" id="files" multiple>
+                    </label>
+                    <ul class="file-preview"></ul>
+                </div>
+        </div>
+        <div class="column-3">
+                <div class="item-details">
+                    <div class="item-details-title">
+                        <p><strong>Details</strong></p>
+                    </div>
+                    <div class="fields">
+                        <p><strong>Visible:</strong><label class="toggle"><input type="checkbox" name="active" checked="checked"><span class="toggle-button"></span></label></p>
+                        <p><strong>Slug:</strong> <span class="slug"></span></p>
+                    </div>
+                    <footer>
+                        <button type="submit">Publish</button>
+                    </footer>
+                </div>
+
+                <div class="item-details">
+                    <div class="item-details-title">
+                        <p><strong>Featured Image</strong></p>
+                    </div>
+                    <div class="fields">
+                        <label class="featured-image image-upload"><input type="file" name="featured"> <span>Set Featured Image</span> <img src="" draggable="false" class="image-preview"></label>
+                    </div>
+                </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

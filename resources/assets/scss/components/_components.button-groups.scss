@@ -1,0 +1,24 @@
+/*
+|--------------------------------------------------------------------------
+| #BUTTONS CORE
+|--------------------------------------------------------------------------
+*/
+
+
+
+.button-group {
+    display: flex;
+
+    @include breakpoint(md) {
+        display: block;
+    }
+    
+    button,
+    .button {
+        margin-right: .5rem;
+
+        &:last-of-type {
+            margin-right: 0;
+        }
+    }
+}

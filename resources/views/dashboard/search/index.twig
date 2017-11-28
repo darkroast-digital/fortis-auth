@@ -1,0 +1,18 @@
+{% extends 'layouts/dashboard.twig' %}
+{% block pageclass %}{% endblock %}
+{% block title %}Search{% endblock %}
+
+{% block content %}
+
+    <div class="title-bar">
+        <h6>Search</h6>
+        <form action="{{ path_for('dashboard.search', { 'category': context } ) }}" method="get">
+            <div class="field is-search">
+                <input type="text" class="search" name="q" placeholder="Search...">
+            </div>
+        </form>
+    </div>
+
+    {% include 'dashboard/search/partials/' ~ context ~ '.twig' %}
+
+{% endblock %}

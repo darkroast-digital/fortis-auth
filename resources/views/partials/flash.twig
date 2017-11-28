@@ -1,0 +1,11 @@
+{% if flash.getMessage('info') %}
+    <div class="alert is-success is-notify">
+        {{ flash.getMessage('info') | first }}
+    </div>
+{% endif %}
+
+{% if flash.getMessage('error') %}
+    <div class="alert is-error is-notify">
+        {{ flash.getMessage('error') | first }}
+    </div>
+{% endif %}

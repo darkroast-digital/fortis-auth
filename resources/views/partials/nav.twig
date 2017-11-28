@@ -1,0 +1,40 @@
+<nav class="nav">
+    <div class="container container-full">
+        <a href="{{ path_for('dashboard.index') }}" class="nav-brand"><img src="/assets/img/logo-light-wide.svg" draggable="false" alt="Fortis Group"></a>
+        <ul class="nav-menu">
+                <li><a href="{{ path_for('dashboard.index') }}" class="{% if current_path == path_for('dashboard.index') %}is-active{% endif %}">Dashboard</a></li>
+                <li><a href="{{ path_for('dashboard.posts') }}" class="{% if 'post' in current_path %}is-active{% endif %}">Posts</a></li>
+                {% if auth.user.role == 'admin' %}
+                    <li><a href="{{ path_for('dashboard.users') }}" class="{% if 'user' in current_path %}is-active{% endif %}">Users</a></li>
+                {% else %}
+                    <li><a href="{{ path_for('dashboard.users.profile', { id: auth.user.id } ) }}" class="{% if 'user' in current_path %}is-active{% endif %}">Profile</a></li>
+                {% endif %}
+                <li><a href="{{ path_for('dashboard.resources') }}" class="{% if 'resource' in current_path %}is-active{% endif %}">Resources</a></li>
+            </ul>
+        <ul class="nav-navbar">
+            <li class="nav-user dropdown-container">
+                {% if auth.user.avatar != 'default' %}
+                    <img src="/assets/uploads/avatars/{{ auth.user.name }}/avatar.jpg" draggable="false">
+                {% else %}
+                    <img src="/assets/uploads/avatars/default.jpg" draggable="false">
+                {% endif %}
+                {{ auth.user.name }}
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <g class="icon">
+                        <path d="M7 10l5 5 5-5z"></path>
+                    </g>
+                </svg>
+                <ul class="dropdown">
+                    <li><a href="{{ path_for('dashboard.posts') }}">View Posts</a></li>
+                    <li><a href="{{ path_for('dashboard.users.profile', { 'id': auth.user.id }) }}">Edit Profile</a></li>
+                    <li><a href="{{ path_for('auth.logout') }}">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+        <div class="hamburger off-canvas-trigger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</nav>

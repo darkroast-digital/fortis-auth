@@ -1,0 +1,38 @@
+{% extends 'layouts/app.twig' %}
+{% block pageclass %}auth{% endblock %}
+{% block title %}reset{% endblock %}
+
+{% block content %}
+
+<div class="auth-container container">
+
+    <div class="auth-image">
+        <img src="/assets/img/logo-light.svg" alt="Fortis Group" draggable="false">
+    </div>
+
+    <div class="auth-form">
+        <form action="{{ path_for('auth.forgot') }}" method="post">
+
+            <h2>Recover Password</h2>
+    
+            <div class="field {{ errors.email ? 'is-error' : '' }}">
+                <label for="email">Email</label>
+                <input type="text" name="email" value="{{ old.email }}">
+                {% if errors.email %}
+                    <span><small>{{ errors.email | first }}</small></span>
+                {% endif %}
+            </div>
+
+            <button type="submit">Submit</button>
+            
+        </form>
+
+        <div class="auth-footer">
+            <a href="{{ path_for('auth.register') }}">Sign Up</a>
+            <a href="{{ path_for('auth.login') }}">Sign In</a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

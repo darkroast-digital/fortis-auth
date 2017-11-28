@@ -1,0 +1,98 @@
+{% extends 'layouts/dashboard.twig' %}
+{% block pageclass %}{% endblock %}
+{% block title %}edit{% endblock %}
+{% block name %}Edit{% endblock %}
+
+{% block content %}
+
+<div class="title-bar">
+    <h6>Editing Post: <span>{{ post.name }}</span></h6>
+    <div class="button-group">
+    <a href="{{ path_for('dashboard.posts.show', { 'slug': post.slug } ) }}" target="_blank" class="button is-outline has-icon"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 24" xml:space="preserve" width="24" height="18"><g class="nc-icon-wrapper" fill="currentcolor"><path fill="currentcolor" d="M22.832,11.445C22.656,11.182,18.461,5,12,5C5.506,5,1.34,11.185,1.166,11.448 c-0.222,0.335-0.222,0.771,0.002,1.106C1.344,12.818,5.539,19,12,19c6.428,0,10.653-6.179,10.83-6.442 C23.056,12.222,23.057,11.782,22.832,11.445z M12,17c-4.35,0-7.635-3.596-8.753-5.002c0.658-0.832,2.075-2.425,4.024-3.59 C7.1,8.908,7,9.441,7,10c0,2.757,2.243,5,5,5s5-2.243,5-5c0-0.555-0.099-1.085-0.268-1.582c1.94,1.164,3.357,2.75,4.018,3.581 C19.623,13.407,16.324,17,12,17z"></path></g></svg>View Post</a>
+    <a href="{{ path_for('dashboard.posts.create') }}" class="button">Add New</a>
+    </div>
+</div>
+
+<form action="{{ path_for('dashboard.posts.update', { 'slug': post.slug }) }}" method="post" class="page-form" enctype="multipart/form-data">
+    <div class="container container-full is-aligned-top">
+        <div class="column-9">
+                <div class="field">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" value="{{ post.name }}" autocomplete="off">
+                </div>
+                <div class="field">
+                    <label for="body">Body</label>
+                    <textarea name="body" id="mde">{{ post.body }}</textarea>
+                </div>
+                <div class="field">
+                    <label>Add Files</label>
+                    <label for="files" class="files">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <g class="nc-icon-wrapper" fill="#acc1d6">
+                                    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"></path>
+                                </g>
+                            </svg>
+                            Choose Your Files
+                        </span>
+                        <input type="file" name="files[]" id="files" multiple>
+                    </label>
+                    <ul class="file-preview"></ul>
+                </div>
+        </div>
+        <div class="column-3">
+            <div class="item-details">
+                <div class="item-details-title">
+                    <p><strong>Details</strong></p>
+                </div>
+                <div class="fields">
+                    <p><strong>Visible:</strong><label class="toggle"><input type="checkbox" name="active" {% if post.active == 1 %}checked="checked"{% endif %}><span class="toggle-button"></span></label></p>
+                    <p><strong>Slug:</strong> <span class="slug">{{ post.slug }}</span></p>
+                    <p><strong>Created:</strong> {{ date(post.created_at) }}</p>
+                    <p><strong>Updated:</strong> {{ date(post.updated_at) }}</p>
+                </div>
+                <footer>
+                    <a href="{{ path_for('dashboard.posts.delete', { 'slug': post.slug } ) }}" class="delete">Delete</a>
+                    <button type="submit">Submit</button>
+                </footer>
+            </div>
+            <div class="item-details">
+                <div class="item-details-title">
+                    <p><strong>Featured Image</strong></p>
+                </div>
+                <div class="fields">
+                    <label class="featured-image image-upload"><input type="file" name="featured"> {% if featured is null %}<span>Set Featured Image</span>{% endif %}<img src="{% if featured is not null %}{{ featured }}{% endif %}" draggable="false" class="image-preview" {% if featured is not null %}style="display: block"{% endif %}></label>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% if comments|length > 0 %}
+<div class="container container-full">
+    <div class="column-9">
+        <h6>Comments</h6>
+        <div class="search-bar has-gutter">
+            {% include 'partials/paginate.twig' with { 'context': 'comments' } %}
+            <form action="{{ path_for('dashboard.search', { 'category': 'comments' } ) }}" method="get">
+                <div class="field is-search">
+                    <input type="text" class="search" name="q" placeholder="Search...">
+                </div>
+            </form>
+        </div>
+        {% for comment in comments %}
+            <div class="media-object">
+                <img src="/assets/uploads/avatars/{{ comment.user.avatar }}.jpg" alt="{{ comment.user.name }}" class="media-object-image">
+                <div class="media-object-content">
+                    <p><small><a href="{{ path_for('dashboard.users.edit', { 'id': comment.user.id} ) }}"><strong>{{ comment.user.name }}</strong></a> says:</small></p>
+                    <p>{{ comment.body }}</p>
+                    <footer><small>{{ date(comment.created_at) }}</small></footer>
+                </div>
+            </div>
+        {% endfor %}
+        {% include 'partials/paginate.twig' with { 'context': 'comments' } %}
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

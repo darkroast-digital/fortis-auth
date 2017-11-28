@@ -1,0 +1,170 @@
+{% extends 'layouts/dashboard.twig' %}
+{% block pageclass %}{% endblock %}
+{% block title %}index{% endblock %}
+
+{% block modalContent %}
+    <h6>Add Files</h6>
+    <form action="{{ path_for('dashboard.resources.store') }}" method="post"  enctype="multipart/form-data">
+        <div class="field">
+            <label for="category">Category</label>
+            <select name="category" class="category-select">
+                <option value="uncategorized">Uncategorized</option>
+                {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="category" class="category-input" placeholder="Add new category..." disabled>
+            <small class="addNewCategory">+ Add New Category</small>
+            <small class="selectCategory">Select Category</small>
+        </div>
+        <div class="field">
+            <label>Files</label> 
+            <label for="files" class="files">
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <g class="nc-icon-wrapper" fill="#acc1d6">
+                            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"></path>
+                        </g>
+                    </svg>
+                    Choose Your Files
+                </span>
+                <input type="file" name="files[]" id="files" multiple>
+            </label>
+            <ul class="file-preview"></ul>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
+
+{% block content %}
+
+<div class="title-bar">
+    <h6>Resources</h6>
+    {% if auth.admin %}
+        <button class="modal-trigger">Add New</button>
+    {% endif %}
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <td></td>
+            <td>Name</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for resource in content %}
+            <tr>
+                {% if resource|split('.')|last == 'jpg' or resource|split('.')|last == 'png' or resource|split('.')|last == 'gif' %}
+                    <td class="mobile-hidden"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g class="nc-icon-wrapper" fill="#05c68c"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"></path></g></svg></td>
+                    <td data-th="Name">
+                        {{ resource|split('.')|first|capitalize|replace({ '-': ' ', '_': ' ' }) }}
+                        <small>Filename: {{ resource }}</small>
+                    </td>
+                {% elseif resource|split('.')|last == 'pdf' %}
+                    <td class="mobile-hidden"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g class="nc-icon-wrapper" fill="#f82044"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z"></path></g></svg></td>
+                    <td data-th="Name">
+                        {{ resource|split('.')|first|capitalize|replace({ '-': ' ', '_': ' ' }) }}
+                        <small>Filename: {{ resource }}</small>
+                    </td>
+                {% else %}
+                    <td class="mobile-hidden"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g class="nc-icon-wrapper" fill="#0daec3"><path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"></path></g></svg></td>
+                    <td data-th="Name">
+                        {{ resource|split('.')|first|capitalize|replace({ '-': ' ', '_': ' ' }) }}
+                        <small>Filename: {{ resource }}</small>
+                    </td>
+                {% endif %}
+                {% if auth.admin %}
+                <td data-th="Download">
+                    <a href="" class="edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <g class="nc-icon-wrapper">
+                                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path>
+                            </g>
+                        </svg>
+                    </a>
+                </td>
+                <td data-th="Trash"><a href="{{ path_for('dashboard.resources.delete') }}?resource={{ resource }}" class="delete"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 16 16" xml:space="preserve" width="16" height="16"><g class="icon icon-delete"><rect data-color="color-2" x="5" y="7" width="2" height="6"></rect> <rect data-color="color-2" x="9" y="7" width="2" height="6"></rect> <path d="M12,1c0-0.6-0.4-1-1-1H5C4.4,0,4,0.4,4,1v2H0v2h1v10c0,0.6,0.4,1,1,1h12c0.6,0,1-0.4,1-1V5h1V3h-4V1z M6,2h4 v1H6V2z M13,5v9H3V5H13z"></path></g></svg></a></td>
+                {% else %}
+                    <td></td>
+                    <td data-th="Download">
+                    <a href="" class="edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <g class="nc-icon-wrapper">
+                                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path>
+                            </g>
+                        </svg>
+                    </a>
+                </td>
+                {% endif %}
+            </tr>
+            <tr class="spacer"></tr>
+        {% endfor %}
+        {% for resource in resources.uncategorized %}
+            <tr>
+                {% if resource|split('.')|last == 'jpg' or resource|split('.')|last == 'png' or resource|split('.')|last == 'gif' %}
+                    <td class="mobile-hidden"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g class="nc-icon-wrapper" fill="#05c68c"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"></path></g></svg></td>
+                    <td data-th="Name">
+                        {{ resource|split('.')|first|capitalize|replace({ '-': ' ', '_': ' ' }) }}
+                        <small>Filename: {{ resource }}</small>
+                    </td>
+                {% elseif resource|split('.')|last == 'pdf' %}
+                    <td class="mobile-hidden"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g class="nc-icon-wrapper" fill="#f82044"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z"></path></g></svg></td>
+                    <td data-th="Name">
+                        {{ resource|split('.')|first|capitalize|replace({ '-': ' ', '_': ' ' }) }}
+                        <small>Filename: {{ resource }}</small>
+                    </td>
+                {% else %}
+                    <td class="mobile-hidden"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g class="nc-icon-wrapper" fill="#0daec3"><path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"></path></g></svg></td>
+                    <td data-th="Name">
+                        {{ resource|split('.')|first|capitalize|replace({ '-': ' ', '_': ' ' }) }}
+                        <small>Filename: {{ resource }}</small>
+                    </td>
+                {% endif %}
+                {% if auth.admin %}
+                <td data-th="Download">
+                    <a href="/assets/uploads/resources/{{ resource }}" download class="edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <g class="nc-icon-wrapper">
+                                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path>
+                            </g>
+                        </svg>
+                    </a>
+                </td>
+                <td data-th="Trash"><a href="{{ path_for('dashboard.resources.delete') }}?resource={{ resource }}" class="delete"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 16 16" xml:space="preserve" width="16" height="16"><g class="icon icon-delete"><rect data-color="color-2" x="5" y="7" width="2" height="6"></rect> <rect data-color="color-2" x="9" y="7" width="2" height="6"></rect> <path d="M12,1c0-0.6-0.4-1-1-1H5C4.4,0,4,0.4,4,1v2H0v2h1v10c0,0.6,0.4,1,1,1h12c0.6,0,1-0.4,1-1V5h1V3h-4V1z M6,2h4 v1H6V2z M13,5v9H3V5H13z"></path></g></svg></a></td>
+                {% else %}
+                    <td></td>
+                    <td data-th="Download">
+                    <a href="/assets/uploads/resources/{{ resource }}" download class="edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <g class="nc-icon-wrapper">
+                                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path>
+                            </g>
+                        </svg>
+                    </a>
+                </td>
+                {% endif %}
+            </tr>
+            <tr class="spacer"></tr>
+        {% endfor %}
+        {% for resource in resources.categories %}
+            <tr>
+                <td class="mobile-hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                        <g class="nc-icon-wrapper" fill="#9abeca">
+                            <path d="M10 5L8 3H3c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V6c0-.55-.45-1-1-1h-5z"></path>
+                        </g>
+                    </svg>
+                </td>
+                <td data-th="Name"><a href="{{ path_for('dashboard.resources.show', { 'directory': resource }) }}">{{ resource }}</a></td>
+                <td class="mobile-hidden"></td>
+                <td data-th="Trash"><a href="{{ path_for('dashboard.resources.delete') }}?resource={{ resource }}" class="delete"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 16 16" xml:space="preserve" width="16" height="16"><g class="icon icon-delete"><rect data-color="color-2" x="5" y="7" width="2" height="6"></rect> <rect data-color="color-2" x="9" y="7" width="2" height="6"></rect> <path d="M12,1c0-0.6-0.4-1-1-1H5C4.4,0,4,0.4,4,1v2H0v2h1v10c0,0.6,0.4,1,1,1h12c0.6,0,1-0.4,1-1V5h1V3h-4V1z M6,2h4 v1H6V2z M13,5v9H3V5H13z"></path></g></svg></a></td>
+            </tr>
+            <tr class="spacer"></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

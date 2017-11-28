@@ -1,0 +1,11 @@
+vendor/
+.env
+.env.prod
+composer.lock
+craft
+error_log
+.DS_Store
+mix-manifest.json
+phpunit.xml
+yarn.lock
+node_modules/

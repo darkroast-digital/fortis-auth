@@ -1,0 +1,75 @@
+/*
+|--------------------------------------------------------------------------
+| #SIDEBAR
+|--------------------------------------------------------------------------
+*/
+
+
+$sidebar-mobile-width: 125px;
+
+.sidebar {
+    position: fixed;
+    height: 100vh;
+    width: $sidebar-width;
+    background: color(grey-lightest);
+
+    @include breakpoint(md) {
+        width: $sidebar-mobile-width;
+    }
+
+    @if not ($is-background-white) {
+        background: color(white);
+    }
+
+    &-brand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: $sidebar-brand-height;
+        background: color(primary);
+        color: color(white);
+        text-decoration: none;
+
+        img {
+            width: 80%;
+        }
+    }
+
+    &-navbar {
+        list-style-type: none;
+        width: 100%;
+        margin-top: $gutter * 2;
+    }
+
+    li {
+        margin-bottom: 0;
+    }
+
+    a:not(.sidebar-brand) {
+        position: relative;
+        display: block;
+        padding: $gutter * .5;
+        color: color(grey);
+        text-decoration: none;
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 3px;
+            background: color(primary);
+            transform: scaleX(0);
+        }
+
+        &.is-active {
+            color: color(black);
+            
+            &:after {
+                transform: scaleX(1);
+            }
+        }
+    }
+}

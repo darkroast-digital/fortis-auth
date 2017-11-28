@@ -1,0 +1,55 @@
+{% extends 'layouts/app.twig' %}
+{% block pageclass %}auth{% endblock %}
+{% block title %}login{% endblock %}
+
+{% block content %}
+
+<div class="auth-container container">
+
+    <div class="auth-image">
+        <img src="/assets/img/logo-light.svg" alt="Fortis Group" draggable="false">
+    </div>
+
+    <div class="auth-form">
+        <form action="{{ path_for('auth.login') }}" method="post">
+
+            <h2>Login</h2>
+
+            <div class="field {{ errors.email ? 'is-error' : '' }}">
+                <label for="email">Email</label>
+                <input type="text" name="email" value="{{ old.email }}">
+                {% if errors.email %}
+                    <span><small>{{ errors.email | first }}</small></span>
+                {% endif %}
+            </div>
+
+            <div class="field {{ errors.password ? 'is-error' : '' }}">
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" name="password" value="{{ old.password }}">
+                    <i class="view-password">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <g class="nc-icon-wrapper" fill="#A9BFD6">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"></path>
+                        </g>
+                    </svg>
+                    </i>
+                </div>
+                {% if errors.password %}
+                    <span><small>{{ errors.password | first }}</small></span>
+                {% endif %}
+            </div>
+
+            <button type="submit">Log In</button>
+
+        </form>
+
+        <div class="auth-footer">
+            <a href="{{ path_for('auth.forgot') }}">Forgot Password?</a>
+            <a href="{{ path_for('auth.register') }}">Sign Up</a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

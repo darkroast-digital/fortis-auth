@@ -1,0 +1,291 @@
+/*
+|--------------------------------------------------------------------------
+| #THEME FORM
+|--------------------------------------------------------------------------
+*/
+
+
+
+
+// #PAGE FORM
+// =========================================================================
+
+.page-form {
+
+    input,
+    select,
+    textarea {
+        background: color(white);
+        border-color: darken(color(grey-lightest), 5%);
+    }
+
+    label {
+        color: rgba(color(primary), .4);
+    }
+}
+
+
+
+
+// #QUICK POST
+// =========================================================================
+
+.quick-post {
+
+    @include breakpoint(md) {
+        order: 2;
+    }
+
+    textarea {
+        height: 100px;
+    }
+
+    .CodeMirror,
+    .CodeMirror-scroll {
+        min-height: 150px;
+    }
+}
+
+.feed-container {
+
+    @include breakpoint(md) {
+        order: 1;
+    }
+}
+
+
+
+
+// #TOGGLE
+// =========================================================================
+
+.toggle {
+    cursor: pointer;
+    display: inline-block;
+
+    &-button {
+        position: relative;
+        display: block;
+        height: 20px;
+        width: 50px;
+        background: color(grey-lighter);
+        border: 2px solid color(grey-lighter);
+        border-radius: radius(round);
+        pointer-events: none;
+        transition: all .2s ease(inOutSine);
+
+        &:before {
+            content: '';
+            position: absolute;
+            height: 100%;
+            width: 50%;
+            background: color(white);
+            border-radius: radius(round);
+            transition: all .2s ease(inOutSine);
+        }
+    }
+
+    input {
+        display: none;
+        
+        &:checked {
+
+            &+.toggle-button {
+                background: color(success);
+                border-color: color(success);
+
+                &:before {
+                    transform: translateX(100%);
+                }
+            }
+        }
+    }
+
+    &:hover {
+
+        .toggle-button {
+
+            &:after {
+                transform: scaleX(1.1);
+            }
+        }
+    }
+}
+
+
+
+// #SEARCH
+// =========================================================================
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    @include breakpoint(md) {
+        display: block;
+    }
+
+    &.has-gutter {
+        margin-bottom: $gutter;
+    }
+}
+
+.is-search {
+    margin-bottom: 0;
+}
+
+.search {
+    width: 250px;
+    border-radius: radius(round);
+    background: color(white) url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%0A%20%20%20%20%3Cg%20class%3D%22nc-icon-wrapper%22%20fill%3D%22%23e3e8eb%22%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M15.5%2014h-.79l-.28-.27C15.41%2012.59%2016%2011.11%2016%209.5%2016%205.91%2013.09%203%209.5%203S3%205.91%203%209.5%205.91%2016%209.5%2016c1.61%200%203.09-.59%204.23-1.57l.27.28v.79l5%204.99L20.49%2019l-4.99-5zm-6%200C7.01%2014%205%2011.99%205%209.5S7.01%205%209.5%205%2014%207.01%2014%209.5%2011.99%2014%209.5%2014z%22%3E%3C/path%3E%0A%20%20%20%20%3C/g%3E%0A%3C/svg%3E);
+    background-repeat: no-repeat;
+    background-position: 210px center;
+    border: solid 1px color(grey-lighter);
+    color: color(grey);
+    padding-left: .75rem;
+    margin-left: $gutter + 1.5;
+    transition: all .2s ease(inOutSine);
+
+    @include breakpoint(md) {
+        width: 100%;
+        margin: 1rem 0;
+        background-position: 190px center;
+    }
+
+    &::placeholder {
+        color: color(grey-light);
+    }
+
+    &:focus {
+        width: 350px;
+        background-position: 310px center;
+    }
+}
+
+
+
+
+// #MDE
+// =========================================================================
+
+.CodeMirror {
+    border-color: darken(color(grey-lightest), 5%);
+    color: color(font);
+}
+
+.editor-toolbar {
+    border-color: color(grey-lighter);
+}
+
+.editor-statusbar {
+    color: rgba(color(primary), .4);
+}
+
+
+
+
+// # FEATURED IMAGE
+// =========================================================================
+
+.page-form {
+
+    label {
+
+        &.featured-image {
+            color: color(primary);
+            text-decoration: underline;
+            text-decoration-skip: ink;
+            cursor: pointer;
+
+            &:hover {
+                color: lighten(color(primary), 10%);
+            }
+
+            input {
+                display: none;
+            }
+        }
+    }
+}
+
+.image-preview {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: none;
+}
+
+
+
+
+// #FILES
+// =========================================================================
+
+.files {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    width: 100%;
+    background: color(white);
+    border: 2px dashed darken(color(grey-lightest), 5%);
+    cursor: pointer;
+    margin-top: $gutter * .5;
+
+    span {
+        display: flex;
+        align-items: center;
+    }
+
+    svg {
+        margin-right: .25rem;
+    }
+
+    &:hover {
+        border-color: darken(color(grey-lightest), 15%);
+        color: darken(color(grey-lightest), 15%);
+    }
+
+    input {
+        display: none;
+    }
+}
+
+.file-preview {
+
+    li {
+        display: flex;
+        align-items: center;
+        background: color(white);
+        margin-top: $gutter * .5;
+        padding: $gutter * .5;
+        border: solid 1px darken(color(grey-lightest), 5%);
+    }
+
+    p {
+        margin-bottom: 0;
+    }
+
+    svg {
+        margin-right: .5rem;
+    }
+}
+
+
+
+
+// #VIEW PASSWORD
+// =========================================================================
+
+.password-container {
+    position: relative;
+}
+
+.view-password {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: .5rem;
+    cursor: pointer;
+}

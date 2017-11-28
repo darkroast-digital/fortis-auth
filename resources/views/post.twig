@@ -1,0 +1,64 @@
+{% extends 'layouts/dashboard.twig' %}
+{% block pageclass %}{% endblock %}
+{% block title %}post{% endblock %}
+
+{% block content %}
+
+<div class="post-page container container-full">
+    <div class="column-8">
+        {% if featured is not null %}
+            <img src="/assets/uploads/posts/{{ post.slug }}/featured.jpg" draggable="false" class="post-image">
+        {% endif %}
+        <div class="block">
+            <h1>{{ post.name }}</h1>
+            <p class="subtitle">By {{ post.user.name }} | Posted {{ date(post.created_at) }} | {{ post.comments | length }} Comments</p>
+            {{ post.body | raw }}
+            <ul>
+            {% for file in files %}
+                <li><a href="/assets/uploads/posts/files/{{ post.slug }}/{{ file }}" download>{{ file|split('.')|first|capitalize|replace({ '-': ' ', '_': ' ' }) }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="page-form">
+        <p><strong>Comments</strong></p>
+        <form action="{{ path_for('dashboard.comment.create', { post_id: post.id } ) }}" method="post">
+            <label for="message">Add Comment</label>
+            <textarea name="message"></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        <label>Recent Comments</label>
+        {% for comment in comments %}
+            <div class="media-object">
+                <img src="/assets/uploads/avatars/{{ comment.user.avatar }}.jpg" alt="{{ comment.user.name }}" class="media-object-image">
+                <div class="media-object-content">
+                    <p><small><a href="{{ path_for('dashboard.users.edit', { 'id': comment.user.id} ) }}"><strong>{{ comment.user.name }}</strong></a> says:</small></p>
+                    <p>{{ comment.body }}</p>
+                    <footer><small>{{ date(comment.created_at) }}</small></footer>
+                </div>
+            </div>
+        {% endfor %}
+        {% include 'partials/paginate.twig' with { 'context': 'comments' } %}
+    </div>
+    </div>
+    <div class="column-4">
+        <p><strong>Recent Posts</strong></p>
+            <div class="block">
+            {% for post in recentPosts %}
+            <div class="feed-item">
+                {% if '/assets/uploads/posts' ~ post.slug ~ '/featured.jpg' %}
+                    <img src="/assets/uploads/posts/{{ post.slug }}/featured.jpg" draggable="false" class="media-object-image">
+                {% else %}
+                    false
+                {% endif %}
+                <div class="media-object-content">
+                    <p><strong><a href="{{ path_for('dashboard.posts.show', { 'slug': post.slug } ) }}">{{ post.name }}</a></strong></p>
+                    <p>{{ excerpt(post.body) }}</p>
+                    <small>Posted {{ date(post.created_at) }} | Updated {{ date(post.updated_at) }} | {{ post.comments | length }} Comments</small>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

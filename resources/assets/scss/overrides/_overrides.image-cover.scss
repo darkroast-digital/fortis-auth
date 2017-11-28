@@ -1,0 +1,21 @@
+/*
+|--------------------------------------------------------------------------
+| #IMAGE COVER
+|--------------------------------------------------------------------------
+*/
+
+
+
+%image-cover,
+.image-cover {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+%image-contain,
+.image-contain {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
