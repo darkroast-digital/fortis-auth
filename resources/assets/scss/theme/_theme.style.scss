@@ -139,29 +139,13 @@ $nav-height: 75px;
 
 .dropdown {
     position: absolute;
-    bottom: -$nav-height * 1.9;
-    right: $gutter;
+    top: $nav-height;
+    right: 0;
     min-width: 250px;
     background: color(white);
     padding: 0;
     display: none;
     list-style-type: none;
-
-    &:after {
-        content: '';
-        position: absolute;
-        top: -10px;
-        right: 10px;
-        width: 0; 
-        height: 0; 
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        border-bottom: 10px solid color(white);
-
-        @if ($has-radius) {
-            border-radius: radius(small);
-        }
-    }
 
     @if ($has-shadow) {
         @include shadow(huge);
@@ -170,17 +154,6 @@ $nav-height: 75px;
     li {
         overflow: hidden;
         position: relative;
-
-        &:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            height: 1px;
-            width: 80%;
-            background: color(grey-lighter);
-        }
 
         &:first-of-type {
             @if ($has-radius) {
@@ -219,6 +192,13 @@ $nav-height: 75px;
 
 .dropdown-container {
     position: relative;
+
+    &:hover {
+
+        .dropdown {
+            display: block;
+        }
+    }
 }
 
 .hamburger {

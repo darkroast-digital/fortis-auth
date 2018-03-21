@@ -7,7 +7,9 @@
 
 <div class="title-bar">
     <h6>Posts</h6>
-    <a href="{{ path_for('dashboard.posts.create') }}" class="button">Add New</a>
+    {% if auth.user.role == 'admin' %}
+        <a href="{{ path_for('dashboard.posts.create') }}" class="button">Add New</a>
+    {% endif %}
 </div>
 
 <div class="page-container container container-full">
@@ -26,7 +28,6 @@
                     {% if auth.user.role == 'admin' %}
                     <td>ID</td> 
                     {% endif %}
-                    <td>User</td>
                     <td>Name</td>
                     {% if auth.user.role == 'admin' %}
                         <td>Visibility</td>
@@ -45,7 +46,6 @@
                             {% if auth.user.role == 'admin' %}
                             <td data-th="ID">{{ post.id }}</td>
                             {% endif %}
-                            <td data-th="User"><img src="/assets/uploads/avatars/{{ post.user.avatar }}.jpg" draggable="false"></td>
                             <td data-th="Name">
                             {% if auth.user.role == 'admin' %}
                                 <a href="{{ path_for('dashboard.posts.edit', { 'slug': post.slug} ) }}">{{ post.name }}</a>

@@ -138,19 +138,24 @@ $('[data-tab]').click(function() {
 
 
 
-// #DROPDOWN
-// =========================================================================
+// // #DROPDOWN
+// // =========================================================================
 
-var dropdownContainer = document.querySelector('.dropdown-container');
-var dropdown = document.querySelector('.dropdown');
+// var dropdownContainer =  $('.dropdown-container');
+// var dropdown = $('.dropdown');
 
-if (dropdown) {
-    dropdownContainer.addEventListener('click', function () {
-        this.classList.add('is-active');
-        dropdown.classList.add('is-active');
-    });
-}
+// dropdownContainer.on('click', function () {
+//     $(this).addClass('is-active');
+//     dropdown.addClass('is-active');
+// });
 
+// $(document).click(function() {
+
+//     if ($('.dropdown').hasClass('is-active')) {
+
+//     $('.dropdown.is-active').removeClass('is-active');
+//     }
+// });
 
 
 

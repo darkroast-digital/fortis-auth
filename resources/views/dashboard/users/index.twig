@@ -35,7 +35,13 @@
                 {% for user in users %}
                         <tr>
                             <td data-th="ID">{{ user.id }}</td>
-                            <td data-th="Avatar"><img src="/assets/uploads/avatars/{{ user.avatar }}.jpg" draggable="false"></td>
+                            <td data-th="Avatar">
+                                {% if user.avatar != 'default' %}
+                                    <img src="/assets/uploads/avatars/{{ user.avatar }}/avatar.jpg" draggable="false">
+                                {% else %}
+                                    <img src="/assets/uploads/avatars/default.jpg" draggable="false">
+                                {% endif %}
+                            </td>
                             <td data-th="Name"><a href="{{ path_for('dashboard.users.edit', { 'id': user.id} ) }}">{{ user.name }}</a><small>Role: {{ user.role }}</small></td>
                             <td data-th="Email"><span><a href="mailTo:{{ user.email }}">{{ user.email }}</a></span></td>
                             <td data-th="Last Active">{{ user.active }}</td>

@@ -6,47 +6,37 @@
 |--------------------------------------------------------------------------
 */
 
-
-
-
 use App\Controllers\CommentController;
+use App\Controllers\ContactController;
 use App\Controllers\Dashboard\DashboardController;
 use App\Controllers\HomeController;
-use App\Controllers\ResourcesController;
 use App\Controllers\PostsController;
+use App\Controllers\ResourcesController;
 use App\Controllers\SearchController;
 use App\Controllers\UsersController;
 use App\Middleware\AdminMiddleware;
 use App\Middleware\AuthMiddleware;
-
-
-
+use App\Middleware\RememberMeMiddleware;
+use App\Middleware\GuestMiddleware;
 
 // #HOME
 // =========================================================================
 
-$app->get('/', HomeController::class . ':index')->setName('home');
-
-
-
+$app->get('/', HomeController::class . ':index')->setName('home')->add(new GuestMiddleware($container));
 
 // #POSTS
 // =========================================================================
 
 $app->get('/post/{slug}', PostsController::class . ':show')->setName('post');
 
-
-
-
 // #DASHBOARD
 // =========================================================================
 
 // USER
 
-$app->group('/dashboard', function () {
-
-    $this->get('', DashboardController::class . ':index')->setName('dashboard.index');
-
+$app->group('/admin', function () {
+    // $this->get('', DashboardController::class . ':index')->setName('dashboard.index');
+    $this->get('', PostsController::class . ':index')->setName('dashboard.index');
 
     $this->get('/posts', PostsController::class . ':index')->setName('dashboard.posts');
     $this->get('/posts/show/{slug}', PostsController::class . ':show')->setName('dashboard.posts.show');
@@ -54,21 +44,20 @@ $app->group('/dashboard', function () {
     $this->post('/comment/create/{post_id}', CommentController::class . ':create')->setName('dashboard.comment.create');
 
     $this->get('/users/profile/{id}', UsersController::class . ':edit')->setName('dashboard.users.profile');
+    $this->post('/users/update/{id}', UsersController::class . ':update')->setName('dashboard.users.update');
 
     $this->get('/search/{category}', SearchController::class . ':search')->setName('dashboard.search');
 
     $this->get('/resources', ResourcesController::class . ':index')->setName('dashboard.resources');
     $this->get('/resources/show/{directory}', ResourcesController::class . ':show')->setName('dashboard.resources.show');
 
+    $this->get('/support', ContactController::class . ':index')->setName('support');
+    $this->post('/support', ContactController::class . ':send');
 })->add(new AuthMiddleware($container));
-
-
-
 
 // ADMIN
 
 $app->group('/dashboard', function () {
-
     $this->get('/posts/create', PostsController::class . ':create')->setName('dashboard.posts.create');
     $this->get('/posts/edit/{slug}', PostsController::class . ':edit')->setName('dashboard.posts.edit');
 
@@ -80,6 +69,7 @@ $app->group('/dashboard', function () {
     $this->get('/users', UsersController::class . ':index')->setName('dashboard.users');
     $this->get('/users/create', UsersController::class . ':create')->setName('dashboard.users.create');
     $this->get('/users/edit/{id}', UsersController::class . ':edit')->setName('dashboard.users.edit');
+    // $this->post('/users/update/{id}', UsersController::class . ':update')->setName('dashboard.users.update');
 
     $this->post('/users/store', UsersController::class . ':store')->setName('dashboard.users.store');
 
@@ -88,5 +78,4 @@ $app->group('/dashboard', function () {
     $this->get('/resources/create', ResourcesController::class . ':create')->setName('dashboard.resources.create');
     $this->post('/resources/store', ResourcesController::class . ':store')->setName('dashboard.resources.store');
     $this->get('/resources/delete', ResourcesController::class . ':destroy')->setName('dashboard.resources.delete');
-
 })->add(new AuthMiddleware($container))->add(new AdminMiddleware($container));

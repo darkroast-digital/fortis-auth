@@ -6,6 +6,7 @@ use App\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
+use Mailgun\Mailgun;
 
 class PostsController extends Controller
 {
@@ -73,7 +74,7 @@ class PostsController extends Controller
         }
         $slug = $this->slug->slugify($params['name']);
         $basePath = __DIR__ . '/../../assets/uploads/posts/' . $slug;
-        $users = User::all();
+        $users = User::all()->toArray();
 
         $active = false;
 
@@ -108,17 +109,37 @@ class PostsController extends Controller
             'active' => $active
         ]);
 
+        $mg = Mailgun::create('key-430a3c205c21f327abdf2db317f386f2');
+        $domain = 'https://fortisgroup.ca';
+
         foreach ($users as $user) {
-            $this->mail->from('josh@darkroast.co', 'Fortis Group')
-                      ->to([
-                            [
-                                'name' => $user->name,
-                                'email' => $user->email
-                            ],
-                      ])
-                      ->subject('There is a new post from Fortis Group!')
-                      ->send('mail/mail.twig', compact('user', 'post'));
+            $mg->messages()->send('fortisgroup.ca', [
+                'from'    => 'communication@fortisgroup.ca',
+                'to'      => $user['email'],
+                'subject' => 'New Post: ' . $post->name,
+                'html'    => $this->view->fetch('mail/mail.twig', compact('user', 'post'))
+            ]);
         }
+
+        // $batchMsg = $mg->BatchMessage($domain); 
+
+        // $batchMsg->setFromAddress('info@fortisgroup.ca', [
+        //     'first' => 'Fortis',
+        //     'last' => 'Group'
+        // ]);
+
+        // $batchMsg->setSubject('There is a new post from Fortis Group!');
+
+        // $batchMsg->setHtmlBody($this->view->fetch('mail/mail.twig', compact('user', 'post')));
+
+        // foreach ($users as $user) {
+
+        //     $batchMsg->addToRecipient($user['email'], [
+        //         'first' => $user['name'],
+        //     ]);
+        // }
+
+        // $batchMsg->finalize();
 
         $this->flash->addMessage('info', 'Post Created!');
 
@@ -144,18 +165,6 @@ class PostsController extends Controller
 
         $users = User::all();
 
-        foreach ($users as $user) {
-            $this->mail->from('josh@darkroast.co', 'Fortis Group')
-                      ->to([
-                            [
-                                'name' => $user->name,
-                                'email' => $user->email
-                            ],
-                      ])
-                      ->subject('A Post Has Been Editied.')
-                      ->send('mail/mail.twig', compact('user', 'post'));
-        }
-
         return $this->view->render($response, 'dashboard/posts/edit.twig', compact('post', 'comments', 'featured', 'visible'));
     }
 
@@ -172,6 +181,34 @@ class PostsController extends Controller
         $files = $_FILES;
         $image = $files['featured'];
         $slug = $this->slug->slugify($params['name']);
+
+        $basePath = __DIR__ . '/../../assets/uploads/posts/' . $slug;
+
+        if (isset($_FILES['files'])) {
+
+            $files = $_FILES['files'];
+            $total = count($files['name']);
+
+        }
+
+        if (isset($_FILES['files'])) {
+
+            if (!file_exists(__DIR__ . '/../../assets/uploads/posts/' . $slug)) {
+                mkdir(__DIR__ . '/../../assets/uploads/posts/' . $slug);
+            };
+
+            move_uploaded_file($image['tmp_name'], __DIR__ . '/../../assets/uploads/posts/' . $slug . '/featured.jpg');
+
+            if (!file_exists($basePath . '/files/')) {
+                mkdir($basePath . '/files/');
+            }
+
+            for ($i=0; $i < $total; $i++) {
+                $filePath = $basePath . '/files/' . $files['name'][$i];
+                move_uploaded_file($files['tmp_name'][$i], $filePath);
+            }
+
+        }
 
         if (!file_exists(__DIR__ . '/../../assets/uploads/posts/' . $slug)) {
             mkdir(__DIR__ . '/../../assets/uploads/posts/' . $slug);

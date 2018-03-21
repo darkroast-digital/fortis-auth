@@ -14,11 +14,6 @@ class ResourcesController extends Controller
         return $this->view->render($response, 'dashboard/resources/index.twig', compact('resources', 'categories'));
     }
 
-    public function create($request, $response, $args)
-    {
-        //
-    }
-
     public function store($request, $response, $args)
     {
         $this->resources->upload($request->getParam('category'), $_FILES['files']);
@@ -34,7 +29,9 @@ class ResourcesController extends Controller
         unset($content[0]);
         unset($content[1]);
 
-        return $this->view->render($response, 'dashboard/resources/index.twig', compact('content'));
+        $dir = $args['directory'];
+
+        return $this->view->render($response, 'dashboard/resources/index.twig', compact('content', 'dir'));
     }
 
     public function edit($request, $response, $args)

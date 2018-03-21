@@ -2,8 +2,9 @@
 
 namespace App\Controllers\Auth;
 
-use App\Models\User;
 use App\Controllers\Controller;
+use App\Models\User;
+use Mailgun\Mailgun;
 use Respect\Validation\Validator as v;
 
 class PasswordController extends Controller
@@ -18,22 +19,27 @@ class PasswordController extends Controller
     {
         $user = User::where('email', $request->getParam('email'))->first();
 
+        if (!$user) {
+            $this->flash->addMessage('info', 'A reset link has been emailed.');
+
+            return $response->withRedirect($this->router->pathFor('auth.forgot'));
+        }
+
         $hash = hash('sha256', $user->email . time());
 
         $user->reset_token = hash('sha256', $user->email . time());
         $user->save();
 
-        $this->mail->from('joshstobbs@gmail.com', 'Josh Stobbs')
-              ->to([
-                    [
-                        'name' => $user->name,
-                        'email' => $user->email
-                    ]
-              ])
-              ->subject('Hey! ' . $user->name . ' A password reset was requested on your account.')
-              ->send('mail/mail.twig', compact('user'));
+        $mg = Mailgun::create('key-430a3c205c21f327abdf2db317f386f2');
 
-        $this->flash->addMessage('success', 'Check your email for your reset link.');
+        $mg->messages()->send('fortisgroup.ca', [
+          'from'    => 'communication@fortisgroup.ca',
+          'to'      => $user->email,
+          'subject' => 'Hey! ' . $user->name . ' A password reset was requested on your account.',
+          'html'    => $this->view->fetch('mail/reset.twig', compact('user'))
+        ]);
+
+        $this->flash->addMessage('info', 'A reset link has been emailed.');
         
         return $response->withRedirect($this->router->pathFor('auth.forgot'));
     }

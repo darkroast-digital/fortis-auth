@@ -9,9 +9,9 @@
         "symfony/var-dumper": "^3.2",
         "vlucas/phpdotenv": "^2.4",
         "zeuxisoo/slim-whoops": "^0.6.1",
-        "illuminate/database": "5.4",
-        "illuminate/pagination": "5.4",
-        "illuminate/contracts": "5.4",
+        "illuminate/database": "^5.4",
+        "illuminate/pagination": "^5.4",
+        "illuminate/contracts": "^5.4",
         "robmorgan/phinx": "^0.7.2",
         "symfony/console": "^3.3",
         "slim/flash": "^0.2.0",
@@ -22,7 +22,10 @@
         "erusev/parsedown": "^1.6",
         "cocur/slugify": "^3.0",
         "nesbot/carbon": "^1.22",
-        "slim/twig-view": "1.2"
+        "slim/twig-view": "^1.2",
+        "mailgun/mailgun-php": "^2.3",
+        "php-http/curl-client": "^1.7",
+        "guzzlehttp/psr7": "^1.4"
     },
     "autoload": {
         "psr-4": {

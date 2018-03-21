@@ -4708,10 +4708,12 @@ tr img {
 
 .image-preview {
   width: 100%;
-  height: 200px;
+  max-width: 250px;
+  height: 250px;
   -o-object-fit: cover;
      object-fit: cover;
   display: none;
+  margin: 0 auto;
 }
 
 .files {
@@ -4926,8 +4928,8 @@ tr img {
 
 .dropdown {
   position: absolute;
-  bottom: -142.5px;
-  right: 1.5rem;
+  top: 75px;
+  right: 0;
   min-width: 250px;
   background: #ffffff;
   padding: 0;
@@ -4937,34 +4939,9 @@ tr img {
           box-shadow: 0 10px 18px 0 rgba(135, 149, 156, 0.2), 0 6px 9px 0 rgba(22, 27, 29, 0.14);
 }
 
-.dropdown:after {
-  content: '';
-  position: absolute;
-  top: -10px;
-  right: 10px;
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid #ffffff;
-  border-radius: 2px;
-}
-
 .dropdown li {
   overflow: hidden;
   position: relative;
-}
-
-.dropdown li:after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  height: 1px;
-  width: 80%;
-  background: #D9E0E3;
 }
 
 .dropdown li:first-of-type {
@@ -4998,6 +4975,10 @@ tr img {
 
 .dropdown-container {
   position: relative;
+}
+
+.dropdown-container:hover .dropdown {
+  display: block;
 }
 
 .hamburger {

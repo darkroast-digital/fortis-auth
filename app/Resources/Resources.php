@@ -15,7 +15,7 @@ class Resources
 
     public function upload($category, $files)
     {
-        $category = $category;
+        $category = str_slug($category);
 
         $files = $files;
         $total = count($files['name']);
@@ -49,9 +49,11 @@ class Resources
             $path = $this->path . $item;
 
             if (is_dir($path)) {
-                array_push($categories, $item);
+                array_push($categories, title_case(str_replace('-', ' ', $item)));
             }
         }
+
+        // dd($categories);
 
         return $categories;
     }

@@ -75,6 +75,15 @@ $app = new Slim\App([
     ],
 ]);
 
+// #ERROR THINGS
+// =========================================================================
+
+if (getenv('PHP_ERRORS') !== 'true') {
+
+error_reporting(0);
+
+}
+
 
 
 // #ERROR REPORTING

@@ -1,0 +1,32 @@
+{% extends 'layouts/dashboard.twig' %}
+{% block pageclass %}{% endblock %}
+{% block title %}Support{% endblock %}
+
+{% block content %}
+
+<div class="post-page container container-full">
+
+    <h6>Support</h6>
+    <form action="{{ path_for('support') }}" method="post" class="column-12 block">
+        <div class="field">
+            <label for="name">Your Name</label>
+            <input type="text" name="name">
+        </div>
+        <div class="field">
+            <label for="email">Your Email</label>
+            <input type="email" name="email">
+        </div>
+        <div class="field">
+            <label for="sbuject">Issue or Concern</label>
+            <input type="text" name="subject">
+        </div>
+        <div class="field">
+            <label for="message">Description</label>
+            <textarea name="message"></textarea>
+        </div>
+        <button type="submit">Send Message</button>
+    </form>
+
+</div>
+
+{% endblock %}
